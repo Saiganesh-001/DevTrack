@@ -1,11 +1,17 @@
 import API from "./axios-client";
-import { CurrentUserResponseType } from "@/types/api.type";
+import { AllWorkspaceResponseType, CurrentUserResponseType, LoginResponseType, loginType, registerType } from "@/types/api.type";
 
-export const loginMutationFn = async () => {};
+export const loginMutationFn = async (
+  data: loginType
+): Promise<LoginResponseType> => {
+  const response = await API.post("/auth/login", data);
+  return response.data;
+};
 
-export const registerMutationFn = async () => {};
+export const registerMutationFn = async (data: registerType) =>
+  await API.post("/auth/register", data);
 
-export const logoutMutationFn = async () => {};
+export const logoutMutationFn = async () => await API.post("/auth/logout");
 
 export const getCurrentUserQueryFn =
   async (): Promise<CurrentUserResponseType> => {
@@ -22,7 +28,11 @@ export const editWorkspaceMutationFn = async () => {};
 
 export const getWorkspaceByIdQueryFn = async () => {};
 
-export const getAllWorkspacesUserIsMemberQueryFn = () => {};
+export const getAllWorkspacesUserIsMemberQueryFn =
+  async (): Promise<AllWorkspaceResponseType> => {
+    const response = await API.get(`/workspace/all`);
+    return response.data;
+  };
 
 export const getWorkspaceAnalyticsQueryFn = async () => {};
 
