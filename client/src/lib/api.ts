@@ -1,5 +1,5 @@
 import API from "./axios-client";
-import { AllWorkspaceResponseType, CurrentUserResponseType, LoginResponseType, loginType, registerType } from "@/types/api.type";
+import { AllProjectPayloadType, AllProjectResponseType, AllWorkspaceResponseType, CreateWorkspaceResponseType, CreateWorkspaceType, CurrentUserResponseType, LoginResponseType, loginType, registerType, WorkspaceByIdResponseType } from "@/types/api.type";
 
 export const loginMutationFn = async (
   data: loginType
@@ -22,11 +22,21 @@ export const getCurrentUserQueryFn =
 //********* WORKSPACE ****************
 //************* */
 
-export const createWorkspaceMutationFn = async () => {};
+export const createWorkspaceMutationFn = async (
+  data: CreateWorkspaceType
+): Promise<CreateWorkspaceResponseType> => {
+  const response = await API.post(`/workspace/create/new`, data);
+  return response.data;
+};
 
 export const editWorkspaceMutationFn = async () => {};
 
-export const getWorkspaceByIdQueryFn = async () => {};
+export const getWorkspaceByIdQueryFn = async (
+  workspaceId: string
+): Promise<WorkspaceByIdResponseType> => {
+  const response = await API.get(`/workspace/${workspaceId}`);
+  return response.data;
+};
 
 export const getAllWorkspacesUserIsMemberQueryFn =
   async (): Promise<AllWorkspaceResponseType> => {
@@ -50,7 +60,16 @@ export const createProjectMutationFn = async () => {};
 
 export const editProjectMutationFn = async () => {};
 
-export const getProjectsInWorkspaceQueryFn = async () => {};
+export const getProjectsInWorkspaceQueryFn = async ({
+  workspaceId,
+  pageSize = 10,
+  pageNumber = 1,
+}: AllProjectPayloadType): Promise<AllProjectResponseType> => {
+  const response = await API.get(
+    `/project/workspace/${workspaceId}/all?pageSize=${pageSize}&pageNumber=${pageNumber}`
+  );
+  return response.data;
+};
 
 export const getProjectByIdQueryFn = async () => {};
 

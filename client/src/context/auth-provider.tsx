@@ -1,15 +1,20 @@
 import { createContext, useContext, useEffect } from "react";
-// import useWorkspaceId from "@/hooks/use-workspace-id";
+import useWorkspaceId from "@/hooks/use-workspace-id";
 import useAuth from "@/hooks/api/use-auth";
-import { UserType } from "@/types/api.type";
+import { UserType, WorkspaceType } from "@/types/api.type";
+import useGetWorkspaceQuery from "@/hooks/api/use-get-workspace";
+import { useNavigate } from "react-router-dom";
 
 // Define the context shape
 type AuthContextType = {
   user?: UserType;
+  workspace?: WorkspaceType
   error: any;
   isLoading: boolean;
+  workspaceLoading: boolean;
   isFetching: boolean;
   refetchAuth: () => void;
+  refetchWorkspace: () => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -17,6 +22,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+
+  const navigate = useNavigate();
+  const workspaceId = useWorkspaceId();
 
   const {
     data: authData,
@@ -27,18 +35,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   } = useAuth();
   const user = authData?.user;
 
-  // const workspaceId = useWorkspaceId();
+  const {
+    data: workspaceData,
+    isLoading: workspaceLoading,
+    error: workspaceError,
+    refetch: refetchWorkspace
+  } = useGetWorkspaceQuery(workspaceId);
 
-  useEffect(() => {});
+  const workspace = workspaceData?.workspace;
+
+  useEffect(() => {
+    if(workspaceError){
+      if(workspaceError.errorCode === "ACCESS_UNAUTHORIZED"){
+        navigate("/");
+      }
+    }
+  },[navigate, workspaceError])
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        error: authError,
-        isLoading,
+        workspace,
+        error: authError || workspaceError,
         isFetching,
-        refetchAuth
+        isLoading,
+        workspaceLoading,
+        refetchAuth,
+        refetchWorkspace,
       }}
     >
       {children}
