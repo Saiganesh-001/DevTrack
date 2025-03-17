@@ -112,7 +112,7 @@ export default function CreateProjectForm({
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-700" >
                 Select Emoji
               </label>
               <Popover>
