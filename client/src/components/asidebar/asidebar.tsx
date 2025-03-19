@@ -34,6 +34,7 @@ import { useAuthContext } from "@/context/auth-provider";
 
 const Asidebar = () => {
   const { isLoading, user } = useAuthContext();
+
   const { open } = useSidebar();
   const workspaceId = useWorkspaceId();
 
@@ -50,7 +51,7 @@ const Asidebar = () => {
                 to={`/workspace/${workspaceId}`}
                 className="hidden md:flex ml-2 items-center gap-2 self-center font-medium"
               >
-                DevTrack
+                Team Sync.
               </Link>
             )}
           </div>
