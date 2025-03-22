@@ -26,6 +26,7 @@ import { loginMutationFn } from "@/lib/api";
 import { toast } from "@/hooks/use-toast";
 import { Loader } from "lucide-react";
 import { useStore } from "@/store/store";
+import GuestUserButton from "@/components/auth/guest-user-button";
 
 const SignIn = () => {
 
@@ -56,11 +57,23 @@ const SignIn = () => {
     },
   });
 
+  const demoUser1Value = {
+    email: "DemoUser1@gmail.com",
+    password: "demo",
+  }
+
+  const demoUser2Value = {
+    email: "DemoUser2@gmail.com",
+    password: "demo",
+  }
+
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     if (isPending) return;
+    console.log(values)
 
     mutate(values, {
       onSuccess: (data) => {
+        console.log(data)
         const accessToken = data.access_token;
         const user = data.user;
 
@@ -103,6 +116,14 @@ const SignIn = () => {
                   <div className="grid gap-6">
                     <div className="flex flex-col gap-4">
                       <GoogleOauthButton label="Login" />
+                    </div>
+                    <div className="flex justify-between">
+                      <div className="flex flex-col gap-4" onClick={() => onSubmit(demoUser1Value)}>
+                        <GuestUserButton label="User 1" />
+                      </div>
+                      <div className="flex flex-col gap-4" onClick={() => onSubmit(demoUser2Value)}>
+                        <GuestUserButton label="User 2" />
+                      </div>
                     </div>
                     <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                       <span className="relative z-10 bg-background px-2 text-muted-foreground">
