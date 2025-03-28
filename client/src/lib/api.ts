@@ -206,6 +206,21 @@ export const getAllTasksQueryFn = async ({
   return response.data;
 };
 
+export const markTaskAsDoneMutationFn = async ({
+  workspaceId,
+  taskId,
+}: {
+  workspaceId: string;
+  taskId: string;
+}): Promise<{
+  message: string;
+}> => {
+  const response = await API.delete(
+    `task/${taskId}/workspace/${workspaceId}/done`
+  );
+  return response.data;
+};
+
 export const deleteTaskMutationFn = async ({
   workspaceId,
   taskId,
@@ -220,3 +235,4 @@ export const deleteTaskMutationFn = async ({
   );
   return response.data;
 };
+

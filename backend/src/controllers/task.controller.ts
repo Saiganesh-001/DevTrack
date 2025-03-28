@@ -9,7 +9,7 @@ import { roleGuard } from "../utils/roleGuard";
 
 import { HTTPSTATUS } from "../config/http.config";
 import { createTaskSchema, taskIdSchema, updateTaskSchema } from "../validation/task.validation";
-import { createTaskService, deleteTaskService, getAllTasksService, getTaskByIdService, updateTaskService } from "../services/task.service";
+import { createTaskService, deleteTaskService, doneTaskService, getAllTasksService, getTaskByIdService, updateTaskService } from "../services/task.service";
 
 export const createTaskController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -117,6 +117,22 @@ export const getTaskByIdController = asyncHandler(
     return res.status(HTTPSTATUS.OK).json({
       message: "Task fetched successfully",
       task,
+    });
+  }
+);
+
+export const doneTaskController = asyncHandler(
+  async (req: Request, res: Response) => {
+    const userId = req.user?._id;
+
+    const taskId = taskIdSchema.parse(req.params.id);
+    const workspaceId = workspaceIdSchema.parse(req.params.workspaceId);
+
+
+    await doneTaskService(workspaceId, taskId);
+
+    return res.status(HTTPSTATUS.OK).json({
+      message: "Task Marked as done successfully",
     });
   }
 );

@@ -196,6 +196,25 @@ export const getTaskByIdService = async (
   return task;
 };
 
+export const doneTaskService = async (
+  workspaceId: string,
+  taskId: string
+) => {
+  const task = await TaskModel.findOneAndUpdate({
+    _id: taskId,
+    workspace: workspaceId,
+  }, {
+    status: TaskStatusEnum.DONE
+  },{
+    new: true,
+  });
+
+  return {
+    message: `Task ${taskId} marked as done.`,
+    task,
+  };
+};
+
 export const deleteTaskService = async (
   workspaceId: string,
   taskId: string

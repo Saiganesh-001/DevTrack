@@ -2,6 +2,7 @@ import { Router } from "express";
 import { 
     createTaskController, 
     deleteTaskController, 
+    doneTaskController, 
     getAllTasksController, 
     getTaskByIdController, 
     updateTaskController 
@@ -14,6 +15,7 @@ taskRoutes.post(
   createTaskController
 );
 
+taskRoutes.delete("/:id/workspace/:workspaceId/done", doneTaskController);
 taskRoutes.delete("/:id/workspace/:workspaceId/delete", deleteTaskController);
 
 taskRoutes.put(
